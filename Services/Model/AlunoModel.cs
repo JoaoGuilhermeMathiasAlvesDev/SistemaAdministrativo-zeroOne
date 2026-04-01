@@ -1,4 +1,5 @@
 ﻿using Dominio.Entidades;
+using Services.Helper;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Services.Model
         public int Matricula { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }
+        public int Idade { get; set; }
         public DateTime DataNascimento { get; set; }
         public bool Ativo { get; set; }
         public decimal ValorMensalidade { get; set; }
@@ -25,43 +27,36 @@ namespace Services.Model
 
         public AlunoModel() { }
 
-        public AlunoModel Response(Aluno aluno)
+
+        public  AlunoModel ToModel(Aluno aluno)
         {
-            this.Id = aluno.Id;
-            this.Nome = aluno.Nome;
-            this.Matricula = aluno.Matricula;
-            this.Email = aluno.Email;
-            this.Telefone = aluno.Telefone;
-            this.Ativo = aluno.Ativo;
-            this.ValorMensalidade = aluno.ValorMensalidadeContratual;
-            this.DiaVencimento = aluno.DiaVencimento;
+            if (aluno == null) return null;
 
-            if (aluno.Turma != null)
+            return new AlunoModel
             {
-                this.NomeTurma = aluno.Turma.Nome;
-                this.NomeProfessor = aluno.Turma.Professor?.Nome ?? "Não atribuído";
+                Id = aluno.Id,
+                Nome = aluno.Nome,
+                Email = aluno.Email,
+                Matricula = aluno.Matricula,
+                Telefone = aluno.Telefone,
+                Idade = Helper.Helper.CalulcarIdade(aluno.DataNascimento),
+                DataNascimento = aluno.DataNascimento,
+                Ativo = aluno.Ativo,
 
-                this.Turma = new TurmaModel
+                // Mapeia o nome longo do domínio para o nome curto da tela
+                ValorMensalidade = aluno.ValorMensalidadeContratual,
+                DiaVencimento = aluno.DiaVencimento,
+
+                // Mapeia a lista de mensalidades caso ela tenha sido carregada (Include)
+                Mensalidades = aluno.Mensalidades?.Select(m => new MensalidadeModel
                 {
-                    Nome = aluno.Turma.Nome,
-                    Professor = new ProfessorModel { Nome = this.NomeProfessor }
-                };
-            }
-            else
-            {
-                this.NomeTurma = "Sem Turma";
-                this.NomeProfessor = "N/A";
-            }
-
-            this.Mensalidades = aluno.Mensalidades.Select(m => new MensalidadeModel
-            {
-                Id = m.Id,
-                Vencimento = m.DataVencimento,
-                Valor = m.ValorOriginal,
-                Status = (int)m.PagamentoStatus
-            }).OrderBy(m => m.Vencimento).ToList(); 
-
-            return this;
+                    Id = m.Id,
+                    Vencimento = m.DataVencimento,
+                    Valor = m.ValorOriginal,
+                    Status = (int)m.PagamentoStatus
+                }).ToList() ?? new List<MensalidadeModel>()
+            };
         }
+
     }
 }

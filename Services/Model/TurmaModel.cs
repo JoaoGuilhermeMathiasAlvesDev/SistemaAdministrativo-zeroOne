@@ -49,17 +49,17 @@ namespace Services.Model
                 this.NomeProfessor = "Sem Professor Atribuído";
             }
 
-            if (turma.Alunos != null && turma.Alunos.Any())
-            {
-                this.Alunos = turma.Alunos.Select(aluno => new AlunoModel
-                {
-                    Id = aluno.Id,
-                    Nome = aluno.Nome,
-                    Matricula = aluno.Matricula,
-                    Email = aluno.Email,
-                    Ativo = aluno.Ativo
-                }).ToList();
-            }
+            //if (turma.Alunos != null && turma.Alunos.Any())
+            //{
+            //    this.Alunos = turma.Alunos.Select(aluno => new AlunoModel
+            //    {
+            //        Id = aluno.Id,
+            //        Nome = aluno.Nome,
+            //        Matricula = aluno.Matricula,
+            //        Email = aluno.Email,
+            //        Ativo = aluno.Ativo
+            //    }).ToList();
+            //}
 
             return this;
         }

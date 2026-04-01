@@ -17,6 +17,23 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<bool> AlteraTurmaAluno(Guid alunoId, Guid turmaid)
+        {
+            if (alunoId == Guid.Empty && Guid.Empty == turmaid)
+                throw new Exception("Não e possivel Atualizar o Aluno.");
+
+            var novaTurma = new AlunoTurma();
+            novaTurma.AtualizarAlunoNaTurma(turmaid, alunoId);
+
+            _unitOfWork.AlunoTurma.Atualizar(novaTurma);
+
+            var salvo = await _unitOfWork.CompleteAsync() > 0;
+
+            await _unitOfWork.CommitTransactionAsync();
+
+            return salvo;
+        }
+
         public async Task<bool> AtulizarAluno(Guid id, AlunoAtualizarModel model)
         {
             var AtualizarAluno = await _unitOfWork.Aluno.ObterPorId(id);
@@ -46,7 +63,14 @@ namespace Services.Services
                 int proximoSequencial = await _unitOfWork.Aluno.ObterProximoSequencial();
                 aluno.DefinirMatricula(proximoSequencial);
 
-                aluno.AtribuirTurma(model.TurmaId);
+                if (model.TurmaId.HasValue && model.TurmaId.Value != Guid.Empty)
+                {
+                    var vinculandoAluno = new AlunoTurma();
+
+                    vinculandoAluno.AdicionarAlunoNaTurma(model.TurmaId.Value, aluno.Id);
+
+                    await _unitOfWork.AlunoTurma.Adicionar(vinculandoAluno);
+                }
 
                 await _unitOfWork.Aluno.Adicionar(aluno);
 
@@ -78,14 +102,16 @@ namespace Services.Services
             if (obterAluno == null)
                 return null;
 
-            return new AlunoModel().Response(obterAluno);
+            return new  AlunoModel().ToModel(obterAluno);
         }
 
         public async Task<List<AlunoModel>> ObterTodos()
         {
             var todosAlunos = await _unitOfWork.Aluno.ObterTodosComInformacoes();
 
-            return todosAlunos.Select(aluno => new AlunoModel().Response(aluno)).ToList();
+            var listaMapeada = todosAlunos
+                    .Select(aluno =>new AlunoModel().ToModel(aluno)).ToList();
+            return listaMapeada;
         }
 
         public async Task RemoverAluno(Guid id)
@@ -100,15 +126,29 @@ namespace Services.Services
             await _unitOfWork.CommitTransactionAsync();
         }
 
+        public async Task<bool> RemoverAlunoDaTurma(Guid alunoId, Guid turmaid)
+        {
+            var obter = await _unitOfWork.AlunoTurma.ObterTurmaDoAluno(alunoId, turmaid);
+
+            await _unitOfWork.AlunoTurma.removerAlunoTurma(obter);
+
+            var salvo = await _unitOfWork.CompleteAsync() > 0;
+
+            await _unitOfWork.CommitTransactionAsync();
+
+            return salvo;
+        }
+
         public async Task<bool> VinncularUmaTurma(Guid alunoid, Guid turmaid)
         {
             var alunoexiste = await _unitOfWork.Aluno.ObterPorId(alunoid);
             if (alunoexiste is null)
                 return false;
 
-            alunoexiste.AtribuirTurma(turmaid);
+            var vinculandoAlunoDaTurma = new AlunoTurma();
+            vinculandoAlunoDaTurma.AdicionarAlunoNaTurma(turmaid, alunoid);
 
-            _unitOfWork.Aluno.Atualizar(alunoexiste);
+            await _unitOfWork.AlunoTurma.Adicionar(vinculandoAlunoDaTurma);
 
             var sucesso = await _unitOfWork.CompleteAsync() > 0;
 
@@ -117,5 +157,7 @@ namespace Services.Services
             return sucesso;
 
         }
+
+
     }
 }

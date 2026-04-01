@@ -89,12 +89,6 @@ namespace Repositorio.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(11)");
 
-                    b.Property<Guid?>("TurmaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TurmaId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("ValorMensalidadeContratual")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -104,11 +98,31 @@ namespace Repositorio.Migrations
                     b.HasIndex("Matricula")
                         .IsUnique();
 
+                    b.ToTable("Alunos", (string)null);
+                });
+
+            modelBuilder.Entity("Dominio.Entidades.AlunoTurma", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AlunoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TurmaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlunoId");
+
                     b.HasIndex("TurmaId");
 
-                    b.HasIndex("TurmaId1");
-
-                    b.ToTable("Alunos", (string)null);
+                    b.ToTable("AlunosTurmas", (string)null);
                 });
 
             modelBuilder.Entity("Dominio.Entidades.Chamada", b =>
@@ -328,16 +342,21 @@ namespace Repositorio.Migrations
                     b.Navigation("Chamada");
                 });
 
-            modelBuilder.Entity("Dominio.Entidades.Aluno", b =>
+            modelBuilder.Entity("Dominio.Entidades.AlunoTurma", b =>
                 {
-                    b.HasOne("Dominio.Entidades.Turma", null)
-                        .WithMany("Alunos")
-                        .HasForeignKey("TurmaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("Dominio.Entidades.Aluno", "Aluno")
+                        .WithMany()
+                        .HasForeignKey("AlunoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Dominio.Entidades.Turma", "Turma")
                         .WithMany()
-                        .HasForeignKey("TurmaId1");
+                        .HasForeignKey("TurmaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Aluno");
 
                     b.Navigation("Turma");
                 });
@@ -386,11 +405,6 @@ namespace Repositorio.Migrations
             modelBuilder.Entity("Dominio.Entidades.Professor", b =>
                 {
                     b.Navigation("Turmas");
-                });
-
-            modelBuilder.Entity("Dominio.Entidades.Turma", b =>
-                {
-                    b.Navigation("Alunos");
                 });
 #pragma warning restore 612, 618
         }

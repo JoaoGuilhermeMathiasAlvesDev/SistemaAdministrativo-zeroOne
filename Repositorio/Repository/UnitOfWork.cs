@@ -28,6 +28,8 @@ namespace Repositorio.Repository
 
         public IDespesaRepository Despesa {  get; private set; }
 
+        public IAlunoTurmaRepository AlunoTurma { get; private set; }
+
         public UnitOfWork(Contexto contexto)
         {
             _contexto = contexto;
@@ -37,7 +39,8 @@ namespace Repositorio.Repository
             Mensalidade = new MensalidadeRepository(_contexto);
             Chamada = new ChamadaRepository(_contexto);
             ChamadaItem = new ChamadaItemRepository(_contexto);
-            Despesa = new DespesaRepository(_contexto); 
+            Despesa = new DespesaRepository(_contexto);
+            AlunoTurma = new AlunoTurmaRepository(_contexto);
         }
 
 

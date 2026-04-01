@@ -19,9 +19,6 @@ namespace Dominio.Entidades
         public virtual Professor? Professor { get; private set; }
         public bool Ativo { get; private set; }
 
-        // Mantenha assim
-        public virtual ICollection<Aluno> Alunos { get; set; } = new List<Aluno>();
-
         public DiaDaSemana DiasDaAula { get; private set; }
 
         public Turma() { }

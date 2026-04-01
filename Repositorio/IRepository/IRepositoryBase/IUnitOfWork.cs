@@ -12,7 +12,7 @@ namespace Repositorio.IRepository.IRepositoryBase
         IMensalidadeRepository Mensalidade { get; }
         IChamadaRepositoy Chamada { get; }
         IChamadaItemRepository ChamadaItem { get; }
-
+        IAlunoTurmaRepository AlunoTurma { get; }
         IDespesaRepository Despesa { get; }
 
         Task BeginTransactionAsync();

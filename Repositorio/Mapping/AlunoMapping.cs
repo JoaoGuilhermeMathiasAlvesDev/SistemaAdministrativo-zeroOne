@@ -20,12 +20,6 @@ namespace Repositorio.Mapping
 
             builder.Property(a => a.ValorMensalidadeContratual).HasPrecision(18, 2).IsRequired();
 
-            builder.HasOne(a => a.Turma)
-                .WithMany(t => t.Alunos)
-                .HasForeignKey(a => a.TurmaId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-
 
             builder.HasMany(a => a.Mensalidades)
                 .WithOne()

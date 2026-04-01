@@ -35,11 +35,6 @@ namespace Repositorio.Mapping
                 .HasForeignKey(t => t.ProfessorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            
-            builder.HasMany(t => t.Alunos)
-                .WithOne() 
-                .HasForeignKey(a => a.TurmaId)
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

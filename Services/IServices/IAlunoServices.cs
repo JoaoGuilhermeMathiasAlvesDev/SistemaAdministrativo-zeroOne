@@ -14,6 +14,10 @@ namespace Services.IServices
         Task<AlunoModel> ObterPorId(Guid id);
         Task<List<AlunoModel>> ObterTodos();
 
+        Task<bool> AlteraTurmaAluno(Guid alunoId,Guid turmaid);
+
+        Task<bool> RemoverAlunoDaTurma(Guid alunoId, Guid turmaid);
+
         Task RemoverAluno(Guid id);
     }
 }

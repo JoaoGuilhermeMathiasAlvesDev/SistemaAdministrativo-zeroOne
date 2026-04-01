@@ -40,34 +40,27 @@ namespace Repositorio.Repository
 
         public async Task<Aluno> ObterTodasInformaçoaDeUmAluno(Guid id)
         {
-            int anoAtual = DateTime.Now.Year;
-
             return await _context.Alunos
-                    .Include(a => a.Turma)
-                    .ThenInclude(t => t.Professor)
-                    .Include(a => a.Mensalidades)
-                    .FirstOrDefaultAsync(a => a.Id == id &&
-                                  a.Mensalidades.Any(m => m.DataVencimento.Year == anoAtual));
+         .Include(a => a.Mensalidades) // Garante que as mensalidades venham junto
+         .AsNoTracking()
+         .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<IEnumerable<Aluno>> ObterTodosComInformacoes()
-        {
-            int anoAtual = DateTime.Now.Year;
 
-            return await _context.Alunos
-                .AsNoTracking()
-                .Include(a => a.Turma)
-                    .ThenInclude(t => t.Professor)
-                .Include(a => a.Mensalidades.Where(m => m.DataVencimento.Year == anoAtual)) // Apenas o filtro de data aqui
-                .OrderBy(a => a.Nome)
-                .ToListAsync();
-        }
 
         public async Task RemoverObjeto(Aluno aluno)
         {
             _context.Alunos.Remove(aluno);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Aluno>> ObterTodosComInformacoes()
+        {
+            return await _context.Alunos
+         .Include(a => a.Mensalidades) // Traz as mensalidades junto com o aluno
+         .AsNoTracking()
+         .ToListAsync();
         }
     }
 }

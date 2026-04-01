@@ -15,10 +15,7 @@ namespace Dominio.Entidades
         public DateTime DataNascimento { get; private set; }
         public decimal ValorMensalidadeContratual { get; private set; }
         public int DiaVencimento { get; private set; }
-        public Guid? TurmaId { get; private set; }
-
-        [ForeignKey("TurmaId")]
-        public virtual Turma? Turma { get; set; }
+      
         public bool Ativo { get; private set; } = true;
         public DateTime DataMatricula { get; private set; } = DateTime.Now;
 
@@ -84,17 +81,6 @@ namespace Dominio.Entidades
             return mensalidades;
         }
 
-        public void AtribuirTurma(Guid? turmaId)
-        {
-            if (turmaId == null || turmaId == Guid.Empty)
-            {
-                TurmaId = null;
-            }
-            else
-            {
-                TurmaId = turmaId;
-            }
-        }
         private string validarNumero(string numero)
         {
             if (string.IsNullOrWhiteSpace(numero))

@@ -20,10 +20,20 @@ namespace Repositorio.Repository
         public async Task<Turma> ObterPorIdCompletoAsync(Guid id)
         {
             return await _context.Turmas
-             .Include(t => t.Professor)
-             .Include(t => t.Alunos)
-             .AsNoTracking()
-             .FirstOrDefaultAsync(t => t.Id == id);
+                .Include(t => t.Professor) 
+                .Where(t => t.Id == id)
+                .Select(t => new {
+                    Turma = t,
+                    
+                    Alunos = _context.AlunoTurmas
+                        .Where(at => at.TurmaId == t.Id)
+                        .Select(at => at.Aluno)
+                        .ToList()
+                })
+                .AsNoTracking()
+                .Select(x => x.Turma)
+                .FirstOrDefaultAsync();
+
         }
     }
 }
