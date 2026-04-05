@@ -5,6 +5,7 @@ using Services.IServices;
 using Services.Model;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -63,9 +64,15 @@ namespace Services.Services
         {
             var novaChama = new Chamada(model.TurmaId, model.DataAula);
 
-            foreach (var aluno in model.Alunos)
+            var existeChamada = await _unitOfWork.Chamada.ObterChamadaCompleta(model.TurmaId,model.DataAula);
+            if(existeChamada != null && existeChamada.DataAula.Date == model.DataAula.Date)
+                return false;
+
+            var alunosDaTurma = await _unitOfWork.AlunoTurma.ListarAlunosPorTurma(model.TurmaId); 
+           
+            foreach (var aluno in alunosDaTurma)
             {
-                novaChama.AdicionarLinhaPresenca(aluno.AlunoId,aluno.Presente,aluno.Observacao);
+                novaChama.AdicionarLinhaPresenca(aluno.Id,false,string.Empty);
             }
 
             await _unitOfWork.Chamada.Adicionar(novaChama);

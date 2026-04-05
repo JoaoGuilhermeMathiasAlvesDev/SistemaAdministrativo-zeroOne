@@ -53,7 +53,6 @@ namespace Services.Model
                 DataNascimento = aluno.DataNascimento,
                 Ativo = aluno.Ativo,
 
-                // Mapeia o nome longo do domínio para o nome curto da tela
                 ValorMensalidade = aluno.ValorMensalidadeContratual,
                 DiaVencimento = aluno.DiaVencimento,
 

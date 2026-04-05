@@ -40,8 +40,11 @@ namespace Repositorio.Repository
 
         public async Task<Aluno> ObterTodasInformaçoaDeUmAluno(Guid id)
         {
+            var ano = DateTime.Now.Year;
             return await _context.Alunos
-         .Include(a => a.Mensalidades) 
+         .Include(a => a.Mensalidades
+         .Where(m => m.DataVencimento.Year == 2026)
+         .OrderBy(m => m.DataVencimento))
          .AsNoTracking()
          .FirstOrDefaultAsync(a => a.Id == id);
         }
@@ -57,10 +60,14 @@ namespace Repositorio.Repository
 
         public async Task<IEnumerable<Aluno>> ObterTodosComInformacoes()
         {
+            var ano = DateTime.Now.Year;
             return await _context.Alunos
-         .Include(a => a.Mensalidades) // Traz as mensalidades junto com o aluno
+         .Include(a => a.Mensalidades
+         .Where(m => m.DataVencimento.Year == ano)
+         .OrderBy(m => m.DataVencimento)) // Traz as mensalidades junto com o aluno
          .AsNoTracking()
          .ToListAsync();
         }
     }
 }
+

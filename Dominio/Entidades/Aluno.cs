@@ -75,8 +75,21 @@ namespace Dominio.Entidades
                 var vencimento = new DateTime(dataAux.Year, dataAux.Month, diaFinal);
 
                 var novaMensalidade = new Mensalidade(this.Id, this.ValorMensalidadeContratual, vencimento);
+
+                int statusDefinido = vencimento.Date switch
+                {
+                    var d when d < DateTime.Now.Date => 1, // Atrasado
+                    var d when d == DateTime.Now.Date => 2, // Vence Hoje (Aberto)
+                    _ => 2                                // Futuro (Aberto)
+                };
+
+                novaMensalidade.MudarStatus(statusDefinido);
+
+
                 mensalidades.Add(novaMensalidade);
             }
+
+
 
             return mensalidades;
         }

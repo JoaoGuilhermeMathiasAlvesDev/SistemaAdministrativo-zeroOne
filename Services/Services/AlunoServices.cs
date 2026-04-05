@@ -106,15 +106,18 @@ namespace Services.Services
             var registroNaTurma = await _unitOfWork.AlunoTurma.ObterTurmaDoAluno(id);
 
             string nomeTurmaEncontrado = string.Empty;
+            Guid? turmaIdEncontrado = null;
 
             if (registroNaTurma != null)
             {
                 var turma = await _unitOfWork.Turma.ObterPorId(registroNaTurma.TurmaId);
                 nomeTurmaEncontrado = turma?.Nome;
+                turmaIdEncontrado = turma.Id;
             }
 
             var model = new  AlunoModel().ToModel(aluno);
             model.NomeTurma = nomeTurmaEncontrado;
+            model.TurmaId = turmaIdEncontrado ?? Guid.Empty;
 
             return model;
         }

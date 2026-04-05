@@ -46,7 +46,7 @@ namespace SistemaAdministrativo.Api.Controllers
             return Ok(salvo);
         }
 
-        [Authorize(Roles = "Admin,Recepcao")]
+        //[Authorize(Roles = "Admin,Recepcao")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Autalizar(Guid id,[FromBody] AlunoAtualizarModel model)
         {
@@ -69,7 +69,17 @@ namespace SistemaAdministrativo.Api.Controllers
             return Ok("Removido Com Sucesso!");
         }
 
-        [HttpPatch("VinculaTurmaAluno/{alunoid:guid}/{turmaid:guid}")]
+        [HttpPut("altera-Turma/{alunoid:guid}/{turmaid:guid}")]
+        public async Task<IActionResult> AlteraTurma(Guid alunoid, Guid turmaid)
+        {
+            var salvo = await _alunoServices.AlteraTurmaAluno(alunoid, turmaid);
+            if (!salvo)
+                return BadRequest("Ocorreu um erro na execução");
+
+            return Ok("Altera Turma Com Sucesso!");
+        }
+
+        [HttpPost("VinculaTurmaAluno/{alunoid:guid}/{turmaid:guid}")]
         public async Task<IActionResult> VincularAlunoTurma(Guid alunoid, Guid turmaid) 
         { 
             var salvo = await _alunoServices.VinncularUmaTurma(alunoid,turmaid);
