@@ -114,7 +114,7 @@ namespace Services.Services
         public async Task<List<TurmaModel>> ObterTodas()
         {
             var obterTodos = await _UnitOfWork.Turma.ObterTodos();
-
+            
             return obterTodos.Select(turma => new TurmaModel().Response(turma)).ToList();
         }
 
@@ -133,5 +133,18 @@ namespace Services.Services
 
         }
 
+        public async Task RemoverAlunoDaTurma(Guid alunoid, Guid turmaId)
+        {
+            var obterAlunoTurma = await _UnitOfWork.AlunoTurma.ObterTurmaDoAluno(alunoid);
+
+            if (obterAlunoTurma.TurmaId != turmaId)
+                throw new Exception("Erro ao encontrar o Aluno");
+
+            await _UnitOfWork.AlunoTurma.removerAlunoTurma(obterAlunoTurma);
+
+            await _UnitOfWork.CompleteAsync();
+
+            await _UnitOfWork.CommitTransactionAsync();
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace Services.Model
             {
                 Id = aluno.Id,
                 Nome = aluno.Nome,
+                Matricula= aluno.Matricula
             };
         }
 

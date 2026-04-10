@@ -185,6 +185,11 @@ namespace Services.Services
             if (alunoexiste is null)
                 return false;
 
+            var alunoTemTurma = await _unitOfWork.AlunoTurma.AlunoEstaEmUmaTurma(alunoid);
+            if (alunoTemTurma)
+                return false;
+            
+
             var vinculandoAlunoDaTurma = new AlunoTurma();
             vinculandoAlunoDaTurma.AdicionarAlunoNaTurma(turmaid, alunoid);
 

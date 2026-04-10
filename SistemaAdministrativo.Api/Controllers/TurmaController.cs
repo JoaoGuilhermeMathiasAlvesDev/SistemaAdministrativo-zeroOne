@@ -108,5 +108,11 @@ namespace SistemaAdministrativo.Api.Controllers
             return Ok("Removeu com Sucesso!");
         }
 
+        [HttpDelete("removerAluno/{alunoId}/{turmaId}")]
+        public async Task<IActionResult> RemoverAlunodaTurma(Guid alunoId,Guid turmaId)
+        {
+            await _turmaServices.RemoverAlunoDaTurma(alunoId,turmaId);
+            return Ok("Removeu com Sucesso!");
+        }
     }
 }

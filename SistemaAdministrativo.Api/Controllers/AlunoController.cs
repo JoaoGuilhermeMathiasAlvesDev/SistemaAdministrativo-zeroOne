@@ -85,9 +85,9 @@ namespace SistemaAdministrativo.Api.Controllers
             var salvo = await _alunoServices.VinncularUmaTurma(alunoid,turmaid);
 
             if(!salvo)
-                return BadRequest("Ocorreu um erro na execução");
+                return BadRequest(new { message ="Ocorreu um erro na execução" });
 
-            return Ok("Vinculado Com Sucesso!");
+            return Ok(new { message= "Vinculado Com Sucesso!" });
         }
 
     }

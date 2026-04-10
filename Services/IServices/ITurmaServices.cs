@@ -19,6 +19,7 @@ namespace Services.IServices
         Task<List<AlunoModel>> ListarAlunosDaTurma(Guid turmaId);
         Task<bool> AtualizarTurma(Guid turmaId,AdicionarAtualizarTurmaModel model);
 
+        Task RemoverAlunoDaTurma(Guid alunoid, Guid turmaId);
         Task Remover(Guid Id);
     }
 }

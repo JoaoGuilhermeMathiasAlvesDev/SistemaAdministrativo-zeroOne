@@ -21,9 +21,9 @@ namespace SistemaAdministrativo.Api.Controllers
             var salvo = await _professorServices.CrearProfessor(model);
 
             if (!salvo)
-                return NotFound("Erro ao Criar Professor.");
+                return NotFound(new { message = "Erro ao Criar Professor." });
 
-            return Ok("Professor Criado com Sucesso!");
+            return Ok(new { message = "Professor Cadastrado com Sucesso!" });
         }
 
         [HttpPut]
@@ -32,9 +32,9 @@ namespace SistemaAdministrativo.Api.Controllers
             var salvo = await _professorServices.AtulizarProfessor(model);
 
             if (!salvo)
-                return NotFound("Erro ao Atualizar o Professor.");
+                return NotFound(new { message = "Erro ao Atualizar o Professor." });
 
-            return Ok("Professor atualizado com Sucesso!");
+            return Ok(new { message = "Professor atualizado com Sucesso!" });
         }
 
         [HttpGet("{id:guid}")]
@@ -58,7 +58,7 @@ namespace SistemaAdministrativo.Api.Controllers
         {
             await _professorServices.RemoverProfessor(id);
 
-            return Ok("Removeu Com Sucesso!");
+            return Ok(new { mensagem = "Removeu Com Sucesso!" });
         }
     }
 }
