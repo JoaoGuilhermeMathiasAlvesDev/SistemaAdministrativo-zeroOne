@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.IServices;
 using Services.Model;
+using System.Security.AccessControl;
 
 namespace SistemaAdministrativo.Api.Controllers
 {
@@ -16,7 +17,7 @@ namespace SistemaAdministrativo.Api.Controllers
         }
 
         [HttpPost] 
-        public async Task<IActionResult> Registrar(AdicionarChamadaModel model)
+        public async Task<IActionResult> Registrar([FromBody] AdicionarChamadaModel model)
         {
             if (model == null) return BadRequest("Dados inválidos.");
 
@@ -76,7 +77,16 @@ namespace SistemaAdministrativo.Api.Controllers
 
             return Ok(relatorio);
         }
+
+        [HttpGet("turma/{turmaId}/data/{data}")]
+        public async Task<IActionResult> ObterPorData(Guid turmaId, DateTime data)
+        {
+            var chama = await _chamadaService.ObterChamadaPorData(turmaId, data);
+
+            if (chama == null)
+                return NotFound(new { message = "Nenhum dado encontrado para esta turma." });
+
+            return Ok(chama);
+        }
     }
-
-
 }

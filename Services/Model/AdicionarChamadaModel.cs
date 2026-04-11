@@ -8,5 +8,8 @@ namespace Services.Model
     {
         public Guid TurmaId { get; set; }
         public DateTime DataAula { get; set; }
+
+        public List<AlunoPresencaEnvioModel> Alunos { get; set; } = new();
+
     }
 }
