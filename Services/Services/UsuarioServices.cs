@@ -40,9 +40,9 @@ namespace Services.Services
             return await _repository.SalvarAlteracoes();
         }
 
-        public async Task<bool> EsqueciSenha(string email, string telefone)
+        public async Task<bool> EsqueciSenha(string usuario, string email)
         {
-            var user = await _repository.ObterPorUsername(email);
+            var user = await _repository.ObterPorUsername(usuario);
             var senharnova = 123456;
 
             var hash = BCrypt.Net.BCrypt.HashPassword(senharnova.ToString());
@@ -52,11 +52,12 @@ namespace Services.Services
             _repository.Atualizar(user);
             var salvo = await _repository.SalvarAlteracoes();
 
-            var mensagem = $"*PulseOne - Recuperação de Acesso*\n\n" +
+            var assunto = "Altração de Senha na Plataforma Zero One!";
+            var mensagem = $"*ZeroOne - Recuperação de Acesso*\n\n" +
                        $"Olá {user.Username}, sua nova senha é: *{senharnova}*\n\n" +
                        $"_Por favor, altere sua senha assim que realizar o login._";
 
-            await _whatsAppServices.EnviarMensagemAsync(telefone, mensagem);
+            await _whatsAppServices.EnviarEmail(email,assunto, mensagem);
 
             return salvo;
         }
@@ -93,9 +94,11 @@ namespace Services.Services
 
         public async Task<bool> ResetarSenha(ResetSenhaRequest request)
         {
-            var user = await _repository.ObterPorToken(request.Token);
+            var user = await _repository.ObterPorUsername(request.username);
 
-            user.ResetarSenha(request.senha, request.Token);
+            var hash = BCrypt.Net.BCrypt.HashPassword(request.senha.ToString());
+
+            user.AltearSenha(hash);
 
             _repository.Atualizar(user);
 

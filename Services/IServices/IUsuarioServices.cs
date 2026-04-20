@@ -11,7 +11,7 @@ namespace Services.IServices
 
         Task<List<UsuarioModel>> ObterTodos();
         Task<bool> Cadastrar(CriarUsuarioRequest request);
-        Task<bool> EsqueciSenha(string usuario,string telefone);
+        Task<bool> EsqueciSenha(string usuario,string email);
         Task<bool> ResetarSenha(ResetSenhaRequest request);
     }
 }

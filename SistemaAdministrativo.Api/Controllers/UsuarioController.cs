@@ -43,20 +43,20 @@ namespace SistemaAdministrativo.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost ("esqueci-senha")]
-        public async Task<IActionResult> EsqueciSenha([FromBody] string usuario,string telefone)
+        [HttpPost("esqueci-senha")]
+        public async Task<IActionResult> EsqueciSenha([FromQuery] string usuario, string email)
         {
-            var resultado = await _usuarioService.EsqueciSenha(usuario,telefone);
+            var resultado = await _usuarioService.EsqueciSenha(usuario, email);
 
-            return Ok("Se o usuário existir, o mennsagem foi enviado.");
+            return Ok(new { message = "Se o usuário existir, o mennsagem foi enviado." });
         }
 
         [AllowAnonymous]
         [HttpPost("resetar-senha")]
-        public async Task<IActionResult>ResetarSenha(ResetSenhaRequest usuario)
+        public async Task<IActionResult>ResetarSenha([FromBody]ResetSenhaRequest usuario)
         {
             var successea = await _usuarioService.ResetarSenha(usuario);
-            return successea ? Ok("Senha Alterada !") : BadRequest("Erro ao resetar.");
+            return successea ? Ok(new { message = "Senha Alterada !" }  ) : BadRequest(new { message = "Erro ao resetar." });
         }
 
         [AllowAnonymous]
