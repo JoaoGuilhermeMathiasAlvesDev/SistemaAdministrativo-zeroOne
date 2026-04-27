@@ -40,7 +40,7 @@ namespace SistemaAdministrativo.Api.Controllers
             if (!sucesso)
                 return NotFound(new { message = "Chamada não encontrada ou sem itens para atualizar." });
 
-            return Ok("Presenças atualizadas com sucesso!");
+            return Ok(new { message = "Presenças atualizadas com sucesso!" });
         }
 
         [HttpGet("{id:guid}")] 

@@ -12,7 +12,7 @@ namespace Services.IServices
         Task<ChamadaModel> ObterPorId(Guid id);
         Task<IEnumerable<ChamadaModel>> ObterPorTurma(Guid turmaId);
         Task<RelatorioTurmaModel> GerarRelatorioConsolidado(Guid turmaId);
-        Task<AdicionarChamadaModel?> ObterChamadaPorData(Guid turmaId, DateTime data);
+        Task<ChamadaModel?> ObterChamadaPorData(Guid turmaId, DateTime data);
 
     }
 }

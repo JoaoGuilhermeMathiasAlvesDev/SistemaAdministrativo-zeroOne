@@ -57,27 +57,14 @@ namespace Services.Services
             return new RelatorioTurmaModel(nomeTurma, chamadas);
         }
 
-        public async Task<AdicionarChamadaModel?> ObterChamadaPorData(Guid turmaId, DateTime data)
+        public async Task<ChamadaModel?> ObterChamadaPorData(Guid turmaId, DateTime data)
         {
-            // Usa o seu método do Repositório que você postou acima
             var historico = await _unitOfWork.Chamada.ObterHistoricoPorTurma(turmaId);
-
-            // Filtra a chamada da data específica
             var chamada = historico.FirstOrDefault(c => c.DataAula.Date == data.Date);
 
             if (chamada == null) return null;
 
-            return new AdicionarChamadaModel
-            {
-                TurmaId = chamada.TurmaId,
-                DataAula = chamada.DataAula,
-                Alunos = chamada.AlunosPresenca.Select(ap => new AlunoPresencaEnvioModel
-                {
-                    AlunoId = ap.AlunoId,
-                    Presente = ap.Presente,
-                    Observacao = ap.Observacao
-                }).ToList()
-            };
+            return new ChamadaModel().Response(chamada);
         }
 
         public async Task<ChamadaModel> ObterPorId(Guid id)

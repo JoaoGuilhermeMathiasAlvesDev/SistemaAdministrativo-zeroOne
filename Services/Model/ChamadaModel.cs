@@ -7,7 +7,7 @@ namespace Services.Model
 {
     public class ChamadaModel
     {
-        public Guid Id { get; set; }
+        public Guid IdChamada { get; set; }
         public Guid TurmaId { get; set; }
         public string NomeTurma { get; set; }
         public DateTime DataAula { get; set; }
@@ -20,7 +20,7 @@ namespace Services.Model
         {
             if (chamada == null) return null;
 
-            this.Id = chamada.Id;
+            this.IdChamada = chamada.Id;
             this.TurmaId = chamada.TurmaId;
             this.DataAula = chamada.DataAula;
 
