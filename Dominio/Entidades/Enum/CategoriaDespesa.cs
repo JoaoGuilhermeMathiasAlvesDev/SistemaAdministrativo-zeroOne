@@ -9,6 +9,10 @@ namespace Dominio.Entidades.Enum
     {
         Contas,
         Matetrial,
-        Aluguel 
+        Aluguel,
+        Marketing,
+        Manutenção,
+        Outros,
+        Salário
     }
 }

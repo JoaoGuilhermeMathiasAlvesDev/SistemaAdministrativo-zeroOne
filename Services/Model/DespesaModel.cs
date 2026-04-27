@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Services.Model
 {
@@ -13,6 +14,8 @@ namespace Services.Model
         public DateTime DataVencimento { get; set; }
         public DateTime? DataPagamento { get; set; }
         public bool Pago { get; set; }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public CategoriaDespesa Categoria { get; set; }
     }
 }

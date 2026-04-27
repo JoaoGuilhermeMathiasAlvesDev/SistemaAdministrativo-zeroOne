@@ -94,6 +94,33 @@ namespace SistemaAdministrativo.Api.Controllers
             return sucesso ? Ok() : BadRequest("Erro ao excluir mensalidade.");
         }
 
+        [HttpGet("Obter-Despesa")]
+        public async Task<IActionResult> ObterDispesa([FromQuery] int mes, [FromQuery] int ano)
+        {
+            var resultado = await _financeiroService.ObterDispesar(mes, ano);
+            return Ok(resultado);
+        }
+
+        [HttpPatch("MudarStatus-Mensalida/{id:guid}")]
+        public async Task<IActionResult> MudarStatus(Guid id, int status)
+        {
+            if (id == Guid.Empty)
+                return BadRequest(new { message = "Precisa da uma Parcela para alter o Status." });
+
+            await _mensalidadeService.MudarStatusPagamento(id, status);
+
+            return Ok(new { message = "Status da Mensalidade Atualizado" });
+        }
+
+        [HttpDelete("despesas/{id:Guid}")]
+        public async Task<IActionResult> RemoverDespesa(Guid id)
+        {
+           var salvo = await _financeiroService.RemoverDespesa(id);
+
+            if (salvo == false)
+                return BadRequest(new { menssagem = "Erro ao remove uma dispesa" });
+            return Ok(new { menssagem = "Removido com Sucesso!" });
+        }
         #endregion
     }
 }
