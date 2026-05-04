@@ -51,6 +51,11 @@ namespace Dominio.Entidades
             if (!System.Enum.IsDefined(typeof(PagamentoStatus), status))
                 throw new ArgumentException("Esse status não existe.");
 
+            if (status == (int)PagamentoStatus.Pago)
+            {
+                DataPagamento = DateTime.Now;
+            }
+             
             PagamentoStatus = (PagamentoStatus)status;
         }
 
